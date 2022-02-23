@@ -52,7 +52,7 @@ public class EmployeeValidator {
      * @param codeDuplicateCheckFlag 社員番号の重複チェックをするかどうか(実施する:true 実施しない:false)
      * @return エラーメッセージ
      */
-    private static String validateCode(EmployeeService service, String code, Boolean codeDuolicateCheckFlag) {
+    private static String validateCode(EmployeeService service, String code, Boolean codeDuplicateCheckFlag) {
 
         //入力値がなければエラーメッセージを返却
         if (code == null || code.equals("")) {
