@@ -6,6 +6,7 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commFollow" value="${ForwardConst.CMD_FORROW.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -44,6 +45,20 @@
             <p>
                 <a href="<c:url value='?action=${actRep}&command=${commEdt}&id=${report.id}' />">この日報を編集する</a>
             </p>
+        </c:if>
+
+        <c:if test="${sessionScope.login_employee.id ！= report.employee.id}">
+            <p>
+                <c:import url="/WEB-INF/views/favorite/favorite.jsp">
+                    <c:param name="repId">${report.id}</c:param>
+                    <c:param name="empId">${report.employee.id}</c:param>
+                </c:import>
+            </p>
+            <form method="POST" action="<c:url value='? action=${action}&command=${commFollow}' />"></form>
+                <button type="submit">いいね${favorite_type_string}</button>
+                (${favorite_count})
+             <input type="hidden" name="id" value="${report.id}" />
+            </form>
         </c:if>
 
         <p>

@@ -2,7 +2,9 @@ package actions;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 
@@ -12,6 +14,7 @@ import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.FavoriteService;
 import services.ReportService;
 
 /**
@@ -21,6 +24,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private FavoriteService favService;
 
     /**
      * メソッドを実行する
@@ -30,8 +34,11 @@ public class ReportAction extends ActionBase {
 
         service = new ReportService();
 
+        favService = new FavoriteService();
+
         //メソッドを実行
         invoke();
+        favService.close();
         service.close();
     }
 
@@ -154,13 +161,19 @@ public class ReportAction extends ActionBase {
             //該当の日報データが存在しない場合はエラー画面を表示
             forward(ForwardConst.FW_ERR_UNKNOWN);
 
-        } else {
+            return;
 
-            putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
-
-            //詳細画面を表示
-            forward(ForwardConst.FW_REP_SHOW);
         }
+
+        List<ReportView> list = new ArrayList<>();
+        list.add(rv);
+        Map<Integer, Long> favCountsMap = favService.count(list);
+        putRequestScope(AttributeConst.FAV_COUNT_MAP, favCountsMap);
+
+        putRequestScope(AttributeConst.REPORT, rv);
+        putRequestScope(AttributeConst.TOKEN, getTokenId());
+
+        forward(ForwardConst.FW_REP_SHOW);
     }
 
     /**
