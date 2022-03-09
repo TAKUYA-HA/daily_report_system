@@ -1,17 +1,19 @@
 package actions;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 
+import actions.views.EmployeeView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import services.FavoriteService;
 
-public class FavoriteAction {
+public class FavoriteAction extends ActionBase {
 
+    private FavoriteService service;
+
+    @Override
     public void process() throws ServletException, IOException {
         service = new FavoriteService();
         invoke();
@@ -20,13 +22,22 @@ public class FavoriteAction {
 
     public void favorite()  throws ServletException, IOException {
         int repId = toNumber(getRequestParam(AttributeConst.EMP_ID));
-        int empId = getLoginEmployee().getId();
+        EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        int empId = loginEmployee.getId();
 
         service.doFavorite(repId, empId);
 
-        Map<String, String> params = new HashMap<>();
-        params.put(ForwardConst.CMD.getValue(), ForwardConst.CMD_INDEX.getValue());
-        redirect(ForwardConst.RD_REP, params);
-    }
+        ForwardConst command;
+        if (getRequestParam(
+                AttributeConst.FAV_RD_CMD).equals(ForwardConst.CMD_INDEX.getValue())) {
 
+            command = ForwardConst.CMD_INDEX;
+        } else {
+            command = ForwardConst.CMD_SHOW;
+        }
+
+        putSessionScope(AttributeConst.REP_ID, repId);
+
+        redirect(ForwardConst.RD_REP, command);
+    }
 }

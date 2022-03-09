@@ -16,7 +16,7 @@ import models.Report;
 public class FavoriteService extends ServiceBase {
 
     private FavoriteService service;
-    @Override
+
     public Map<Integer, Long> count(List<ReportView> reports) {
         Map<Integer, Long> favCountsMap = new HashMap<>();
         for(ReportView rv : reports) {
@@ -24,6 +24,17 @@ public class FavoriteService extends ServiceBase {
             favCountsMap.put(rv.getId(), cnt);
         }
         return favCountsMap;
+    }
+
+    private Long countFavorite(Report r) {
+        try {
+            long cnt = em.createNamedQuery(JpaConst.Q_FAV_COUNT_BY_REP, Long.class)
+                    .setParameter(JpaConst.ENTITY_REP, r)
+                    .getSingleResult();
+            return cnt;
+        } catch (NoResultException nre) {
+            return 0L;
+        }
     }
 
     public void doFavorite(int repId, int empId) {

@@ -61,6 +61,9 @@ public class ReportAction extends ActionBase {
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
 
+        Map<Integer, Long> favCountsMap = favService.count(reports);
+        putRequestScope(AttributeConst.FAV_COUNT_MAP, favCountsMap);
+
         //セッションにフラッシュメッセージが設定されている場合はリクエストスコープに移し替え、セッションからは削除する
         String flush = getSessionScope(AttributeConst.FLUSH);
         if (flush != null) {
@@ -155,7 +158,16 @@ public class ReportAction extends ActionBase {
     public void show() throws ServletException, IOException {
 
         //idを条件に日報データを取得する
-        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        Integer id = null;
+        String paramId = getRequestParam(AttributeConst.REP_ID);
+        if(paramId == null || paramId.equals("")) {
+            Integer paramIdFromSession = getSessionScope(AttributeConst.REP_ID);
+            id = paramIdFromSession;
+            removeSessionScope(AttributeConst.REP_ID);
+        } else {
+            id = toNumber(paramId);
+        }
+        ReportView rv = service.findOne(id);
 
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
@@ -167,6 +179,7 @@ public class ReportAction extends ActionBase {
 
         List<ReportView> list = new ArrayList<>();
         list.add(rv);
+
         Map<Integer, Long> favCountsMap = favService.count(list);
         putRequestScope(AttributeConst.FAV_COUNT_MAP, favCountsMap);
 

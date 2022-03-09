@@ -35,6 +35,7 @@
                             <c:import url="/WEB-INF/views/favorite/favorite.jsp">
                                     <c:param name="repId">${report.id}</c:param>
                                     <c:param name="empId">${report.employee.id}</c:param>
+                                    <c:param name="rdCommand">${commIdx}</c:param>
                             </c:import>
                         </td>
                     </tr>

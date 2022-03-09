@@ -5,6 +5,7 @@
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
+<c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
 <c:set var="commFollow" value="${ForwardConst.CMD_FORROW.getValue()}" />
 
@@ -47,19 +48,13 @@
             </p>
         </c:if>
 
-        <c:if test="${sessionScope.login_employee.id ！= report.employee.id}">
-            <p>
-                <c:import url="/WEB-INF/views/favorite/favorite.jsp">
-                    <c:param name="repId">${report.id}</c:param>
-                    <c:param name="empId">${report.employee.id}</c:param>
-                </c:import>
-            </p>
-            <form method="POST" action="<c:url value='? action=${action}&command=${commFollow}' />"></form>
-                <button type="submit">いいね${favorite_type_string}</button>
-                (${favorite_count})
-             <input type="hidden" name="id" value="${report.id}" />
-            </form>
-        </c:if>
+        <p>
+            <c:import url="/WEB-INF/views/favorite/favorite.jsp">
+                <c:param name="repId">${report.id}</c:param>
+                <c:param name="empId">${report.employee.id}</c:param>
+                <c:param name="rdCommand">${commShow}</c:param>
+            </c:import>
+        </p>
 
         <p>
             <a href="<c:url value='?action=${actRep}&command=${commIdx}' />">一覧に戻る</a>

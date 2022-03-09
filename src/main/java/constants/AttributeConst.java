@@ -50,6 +50,7 @@ public enum AttributeConst {
     REP_TITLE("title"),
     REP_CONTENT("content"),
 
+    FAV_RD_CMD("rdCommand"),
     FAV_COUNT_MAP("favCntMap"),
     FAVORITE_TYPE_STRING("favorite_type_string"),
     FAVORITE_COUNT("favorite_count");

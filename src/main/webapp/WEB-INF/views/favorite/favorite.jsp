@@ -16,7 +16,7 @@
             <i class="far fa-thumbs-up">いいね(${favCnt})</i>
         </c:when>
         <c:otherwise>
-            <a href="<c:url value='?action=${actFav}&command=${commFav}&id=${repId}' />">
+            <a href="<c:url value='?action=${actFav}&command=${commFav}&id=${repId}&rdCommand=${param.rdCommand}' />">
                 <i class="far fa-thumbs-up">いいね(${favCnt})</i>
            </a>
         </c:otherwise>
